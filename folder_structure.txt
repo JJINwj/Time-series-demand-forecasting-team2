@@ -1,0 +1,74 @@
+폴더 PATH의 목록입니다.
+볼륨 일련 번호는 A2F8-0EF3입니다.
+C:.
+|   .gitignore
+|   folder_structure.txt
+|   README.md
+|   
++---config
+|       params.yaml
+|       
++---data
+|   +---interim
+|   |       readme.md
+|   |       
+|   +---processed
+|   |       readme.md
+|   |       
+|   \---raw
+|           readme.md
+|           
++---notebooks
+|   +---00.template
+|   |       01_eda_template.ipynb
+|   |       02_feature_engineering_template.ipynb
+|   |       03_modeling_timeseries_template.ipynb
+|   |       04_visualization_report_template.ipynb
+|   |       
+|   +---01.bike
+|   |       bike_01_eda.ipynb
+|   |       bike_02_feature_engineering.ipynb
+|   |       bike_03_modeling.ipynb
+|   |       bike_04_visualization.ipynb
+|   |       
+|   +---02.btc
+|   |       btc_01_eda.ipynb
+|   |       btc_02_feature_engineering.ipynb
+|   |       btc_03_modeling.ipynb
+|   |       btc_04_visualization.ipynb
+|   |       
+|   +---03.subway
+|   |       subway_01_eda.ipynb
+|   |       subway_02_feature_engineering.ipynb
+|   |       subway_03_modeling.ipynb
+|   |       subway_04_visualization.ipynb
+|   |       
+|   \---04.delay
+|           delay_01_eda.ipynb
+|           delay_02_feature_engineering.ipynb
+|           delay_03_modeling.ipynb
+|           delay_04_visualization.ipynb
+|           
++---report
+|   |   final_report.md
+|   |   
+|   \---figures
+|       +---01.bike
+|       |       readme.md
+|       |       
+|       +---02.btc
+|       |       readme.md
+|       |       
+|       +---03.subway
+|       |       readme.md
+|       |       
+|       \---04.delay
+|               readme.md
+|               
+\---src
+        data_loader.py
+        features.py
+        modeling_timeseries.py
+        preprocessing.py
+        visualization.py
+        

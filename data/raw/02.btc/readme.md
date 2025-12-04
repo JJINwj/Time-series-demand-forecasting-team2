@@ -9,7 +9,8 @@
 
 ---
 **2. 데이터 기간**
-  * CryptoDataDownload에서 제공하는 BTCUSDT 거래쌍 데이터는 2017-8-17 04:00:00 부터 2025-12-02 23:00:00 까지 존재한다 (25년 12월 4일 기준). 
+  * CryptoDataDownload에서 제공하는 BTCUSDT 거래쌍 데이터는 2017-8-17 04:00:00 부터 2025-12-02 23:00:00 까지 존재한다.
+    (25년 12월 4일 기준)
 
 ---
 **3. 데이터 간격**
@@ -38,5 +39,6 @@
 ---
 **5. 데이터 수집 방식**
   * CryptoDataDownload (https://www.cryptodatadownload.com/data/binance/#google_vignette)에서 제공하는 CSV 파일을 그대로 Raw Data로 사용한다.
+
 
 

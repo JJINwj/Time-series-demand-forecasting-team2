@@ -10,6 +10,7 @@
 ---
 **2. 데이터 기간**
   * CryptoDataDownload에서 제공하는 BTCUSDT 거래쌍 데이터는 2017-8-17 04:00:00 부터 2025-12-02 23:00:00 까지 존재한다.
+    
     (25년 12월 4일 기준)
 
 ---
@@ -31,14 +32,17 @@
   * Volume USDT         : 해당 시간 동안 거래된 USDT 기준 거래량 (거래 금액 총합)
   * tradecount          : 해당 시간 동안 체결된 거래 횟수
   
-  - Unix time 
+  > Unix time 
     : 컴퓨터 시스템에서 날짜·시간을 숫자로 표현하는 방식으로, 1970년 1월 1일 00:00:00 UTC부터 흐른 시간을 ‘초’ 또는 ‘밀리초’ 단위로 나타낸 값이다.
-  - candle
+
+  > candle 
     : 주식·암호화폐에서 많이 쓰는 가격 표시 방식으로, 일정 기간 동안의 시가(Open), 고가(High), 저가(Low), 종가(Close)를 하나의 블록로 묶어 표현한 것이다.
 
 ---
 **5. 데이터 수집 방식**
-  * CryptoDataDownload (https://www.cryptodatadownload.com/data/binance/#google_vignette)에서 제공하는 CSV 파일을 그대로 Raw Data로 사용한다.
+  * CryptoDataDownload에서 제공하는 CSV 파일을 그대로 Raw Data로 사용한다.
+  * 링크는 다음과 같다: https://www.cryptodatadownload.com/data/binance/#google_vignette
+
 
 
 

@@ -1,6 +1,6 @@
 # 비트코인 주가 예측 프로젝트: Raw Data
 
-비트코인 주가 예측 프로젝트에서는 Binance 거래소의 BTCUSDT 1시간봉 시계열 데이터를 Raw Data로 사용한다.
+비트코인 주가 예측 프로젝트에서는 CryptoDataDownload에서 제공하는 Binance 거래소의 BTCUSDT 1시간봉 시계열 데이터를 Raw Data로 사용한다.
 
 ---
 **1. BTCUSDT란?**
@@ -9,41 +9,34 @@
 
 ---
 **2. 데이터 기간**
-  * BTCUSDT 거래쌍은 2017년 8월 17일에 Binance에서 처음 생성되었으므로, 데이터 기간은 2017-08-17 ~ 2025-11-26(현재)이다.
+  * CryptoDataDownload에서 제공하는 BTCUSDT 거래쌍 데이터는 2017-8-17 04:00:00 부터 2025-12-02 23:00:00 까지 존재한다 (25년 12월 4일 기준). 
 
 ---
 **3. 데이터 간격**
-  * 일봉 데이터는 약 3,000개 수준으로 딥러닝 학습에는 부족하고, 분봉 데이터는 노이즈가 과도하다.
-  * 따라서, 약 6만 개 이상의 충분한 시계열을 확보하면서도 변동성 패턴을 잘 반영하기 위해 1시간 간격 데이터를 사용한다.
+  * 일봉 데이터는 약 3,000개 수준으로 딥러닝 학습에는 부족하며, 분봉 데이터는 과도한 노이즈가 포함된다.
+  * 따라서, 약 6만 개 이상의 충분한 데이터을 확보하면서도 변동성 패턴을 잘 반영하기 위해 시간봉 데이터를 사용한다.
 
 ---
-**4. 데이터 구성 (BTCUSDT_1h_raw.csv)**
+**4. 데이터 구성 (Binance_BTCUSDT_1h.csv)**
   * 데이터를 구성하는 각 열과 그에 대한 설명은 다음과 같다.
-  * timestamp           : candle의 시작 시각 (Unix time, ms)
-  * open                : 시가 (해당 시간의 첫 거래 가격)
-  * high                : 고가 (해당 시간 중 가장 높은 가격)
-  * low                 : 저가 (해당 시간 중 가장 낮은 가격)
-  * close               : 종가 (해당 시간의 마지막 거래 가격, 예측 타깃)
-  * volume              : 해당 시간 동안 거래된 BTC 수량
-  * close_time          : candle의 종료 시각 (Unix time, ms)
-  * quote_asset_volume  : USDT 기준 거래량 (거래 금액 총합)
-  * num_trades          : 해당 시간 동안 체결된 거래 횟수
-  * taker_buy_base      : taker 매수 BTC 수량
-  * taker_buy_quote     : taker 매수 USDT 금액
-  * ignore              : 내부용 placeholder 필드 (사용되지 않음)
+  * Unix                : candle 시작 시각 (Unix time)
+  * Date                : 날짜 및 시간 (UTC)
+  * Symbol              : 거래쌍 이름 (BTCUSDT)
+  * Open                : 시가 (해당 시간의 첫 거래 가격)
+  * High                : 고가 (해당 시간 중 가장 높은 가격)
+  * Low                 : 저가 (해당 시간 중 가장 낮은 가격)
+  * Close               : 종가 (해당 시간의 마지막 거래 가격, 예측 타깃 변수)
+  * Volume BTC          : 해당 시간 동안 거래된 BTC 수량
+  * Volume USDT         : 해당 시간 동안 거래된 USDT 기준 거래량 (거래 금액 총합)
+  * tradecount          : 해당 시간 동안 체결된 거래 횟수
   
   - Unix time 
-    : 컴퓨터 시스템에서 날짜·시간을 숫자로 표현하는 방식으로, 1970년 1월 1일 00:00:00 UTC부터 흐른 시간을 ‘초’ 또는 ‘밀리초(ms)’ 단위로 나타낸 값이다.
+    : 컴퓨터 시스템에서 날짜·시간을 숫자로 표현하는 방식으로, 1970년 1월 1일 00:00:00 UTC부터 흐른 시간을 ‘초’ 또는 ‘밀리초’ 단위로 나타낸 값이다.
   - candle
     : 주식·암호화폐에서 많이 쓰는 가격 표시 방식으로, 일정 기간 동안의 시가(Open), 고가(High), 저가(Low), 종가(Close)를 하나의 블록로 묶어 표현한 것이다.
-  - taker
-    : 거래소에서 주문이 성립될 때, 이미 존재하는 호가를 가져가는 주문을 낸 사람을 말한다.
-  * placeholder
-    : 컴퓨터나 데이터 구조에서 자리를 채우기 위해 넣어둔 임시 값을 의미한다.
 
 ---
-**5. 데이터 수집 코드 (Download_RawData.ipynb)**
-  * BTCUSDT 1시간봉 전체 데이터를 자동으로 다운로드하는 Python 코드이다.
-  * Binance API의 1000개 제한을 우회하기 위해, startTime을 주기적으로 업데이트하여 데이터를 여러 번 받고, 이어붙이는 방식이다.
+**5. 데이터 수집 방식**
+  * CryptoDataDownload (https://www.cryptodatadownload.com/data/binance/#google_vignette)에서 제공하는 CSV 파일을 그대로 Raw Data로 사용한다.
 
 

@@ -19,7 +19,7 @@
   * 따라서, 약 6만 개 이상의 충분한 데이터을 확보하면서도 변동성 패턴을 잘 반영하기 위해 시간봉 데이터를 사용한다.
 
 ---
-**4. 데이터 구성 (Binance_BTCUSDT_1h.csv)**
+**4. 데이터 구성 (btc_raw.csv)**
   * 데이터를 구성하는 각 열과 그에 대한 설명은 다음과 같다.
   * Unix                : candle 시작 시각 (Unix time)
   * Date                : 날짜 및 시간 (UTC)
@@ -42,6 +42,7 @@
 **5. 데이터 수집 방식**
   * CryptoDataDownload에서 제공하는 CSV 파일을 그대로 Raw Data로 사용한다.
   * 링크는 다음과 같다: https://www.cryptodatadownload.com/data/binance/#google_vignette
+
 
 
 

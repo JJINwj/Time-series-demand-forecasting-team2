@@ -8,7 +8,7 @@
 
    : 직전 시간 대비 로그 수익률
 
-   $log \\_ return_t = \ln{\left(\frac{Close_t}{Close_{t-1}}\right)}$
+   $log \\_ return_t = \ln{\left(\dfrac{Close_t}{Close_{t-1}}\right)}$
 
  * abs_return
  
@@ -20,19 +20,19 @@
  
    :	시가 대비 고저차 비율 (변동성 지표)
 
-   $high\\_low\\_range\_t = \frac{High\_t - Low\_t}{Open\_t}$ 
+   $high\\_low\\_range\_t = \dfrac{High\_t - Low\_t}{Open\_t}$ 
    
  * return_5
  
    :	지난 5시간 종가 변화율
   
-   $return\\_5\_t = \frac{Close\_t - Close\_{t-5}}{Close\_{t-5}}$   
+   $return\\_5\_t = \dfrac{Close\_t - Close\_{t-5}}{Close\_{t-5}}$   
   
  * return_24
 
    : 지난 24시간 종가 변화율
 
-   $return\\_24\_t = \frac{Close\_t - Close\_{t-24}}{Close\_{t-24}}$   
+   $return\\_24\_t = \dfrac{Close\_t - Close\_{t-24}}{Close\_{t-24}}$   
    
  * close_open
  
@@ -50,7 +50,7 @@
 
    : min(시가, 종가) − 저가
 
-   $lower\_shadow\_t = \min(Open\_t, Close\_t) - Low\_t$
+   $lower\\_shadow\_t = \min(Open\_t, Close\_t) - Low\_t$
    
  * real_body	
 
@@ -60,22 +60,40 @@
   
 ---
 
-**2. 거래량 기반 특징 (Volume-based Features)**
-  * volume_z
+**2. 거래량 기반 피처 (Volume-based Features)**
+ * volume_z
     
-   $volume\\_z\_t = \frac{Volume_t - \mu_{t-23t}}{\sig_{t-23t}}$
-   
-변화율 $volume\_change\_t = \frac{Volume\_t - Volume\_{t-1}}{Volume\_{t-1}}$
-/ Volume Change: 거래량 급등락은 가격 방향성 변화의 대표적인 선행 지표로 알려져 있다.
-  * 참고문헌: Karpoff, J. (1987). The relation between price changes and trading volume.
----
-**3. 오더플로우 기반 특징 (Market Microstructure Features)**
-  * 매수 비율(Buy Ratio), 매수–매도 불균형(Order Imbalance): 단기 수익률은 매수·매도 압력의 불균형에 의해 크게 좌우되며, 이는 시장 미시구조 분석에서 중요한 개념이다.
-  * 수식: 매수 비율 $buy\_ratio\_t = \frac{taker\_buy\_base\_t}{volume\_btc\_t}$
-         오더플로우 불균형 $order\_imbalance\_t = taker\_buy\_base\_t - (volume\_btc\_t - taker\_buy\_base\_t)$
-  * 참고문헌: Easley, D., López de Prado, M., & O’Hara, M. (2012). The microstructure of the stock market.
+   : 
 
-4. 변동성 특징 (Volatility Features)
+   $volume\\_z\_t = \dfrac{Volume\_t - \mu\_{t-23t}}{\sigma\_{t-23t}}$
+
+ * volume_change
+    
+   : 
+
+   $volume\\_change\_t = \dfrac{Volume\_t - Volume\_{t-1}}{Volume\_{t-1}}$
+   
+---
+
+**3. 오더플로우 기반 피처 (Market Microstructure Features)**
+
+ * buy_ratio
+    
+   : 
+
+   $buy\\_ratio\_t = \dfrac{taker\\_buy\\_base\_t}{volume\\_btc\_t}$
+   
+ * order_imbalance
+    
+   : 
+
+   $order\\_imbalance\_t = taker\\_buy\\_base\_t - (volume\\_btc\_t - taker\\_buy\\_base\_t)$
+   
+  * 매수 비율(Buy Ratio), 매수–매도 불균형(Order Imbalance): 단기 수익률은 매수·매도 압력의 불균형에 의해 크게 좌우되며, 이는 시장 미시구조 분석에서 중요한 개념이다.
+
+---
+    
+**4. 변동성 피처 (Volatility Features)**
 • Rolling Volatility (24h, 168h)
 
 과거 변동성은 미래 변동성 예측에서 강력한 지표로 작용한다.
@@ -235,6 +253,7 @@ $dayofweek = timestamp.dayofweek$
   * Jegadeesh, N., & Titman, S. (1993). Returns to buying winners and selling losers: Implications for stock market efficiency. Journal of Finance, 48(1), 65–91.
   * Kim, J. H., & White, H. (2004). Consistent VK testing for structural breaks in GARCH models. Journal of Econometrics, 122(1), 225–250.
   * Caporale, G. M., & Plastun, A. (2018). Calendar anomalies in the cryptocurrency market. Finance Research Letters.
+
 
 
 

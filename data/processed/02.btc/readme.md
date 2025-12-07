@@ -3,7 +3,9 @@
 비트코인 주가 예측 프로젝트에서는 머신러닝 사용을 위해 피처 엔지니어링 (Feature engineering)을 실시한다. 각 피처들은 논문에 언급되었거나 또는 주가 예측에 일반적으로 사용되는 것으로 선정하였다.
 
 ---
-**1. 가격 기반 피처 (Price-based Features)**
+
+**1. 주가 기반 피처 (Price-based Features)**
+
  * log_return
 
    : 직전 시간 대비 로그 수익률
@@ -12,13 +14,13 @@
 
  * abs_return
  
-   : 로그 수익률의 절대값 (변동성 크기 반영)
+   : 로그 수익률의 절대값
 
    $abs \\_ return_t = \left|log \\_ return_t\right|$
   
  * high_low_range
  
-   :	시가 대비 고저차 비율 (변동성 지표)
+   :	시가 대비 고저차 비율
 
    $high\\_low\\_range\_t = \dfrac{High\_t - Low\_t}{Open\_t}$ 
    
@@ -26,13 +28,13 @@
  
    :	지난 5시간 종가 변화율
   
-   $return\\_5\_t = \dfrac{Close\_t - Close\_{t-5}}{Close\_{t-5}}$   
+   $return\\_5\_t = \dfrac{Close\_t - Close\_{t-4}}{Close\_{t-4}}$   
   
  * return_24
 
    : 지난 24시간 종가 변화율
 
-   $return\\_24\_t = \dfrac{Close\_t - Close\_{t-24}}{Close\_{t-24}}$   
+   $return\\_24\_t = \dfrac{Close\_t - Close\_{t-23}}{Close\_{t-23}}$   
    
  * close_open
  
@@ -40,6 +42,16 @@
 
    $close\\_open_t = \dfrac{Close_t - Open_t}{Open_t}$
    
+---
+
+**2. 봉 기반 피처 (Candle-based Features)**
+
+ * real_body	
+
+   : 종가 − 시가의 절대값
+
+   $real\\_body\_t = \left|Close\_t - Open\_t \right|$
+  
  * upper_shadow
  
    :고가 − max(시가, 종가)
@@ -52,127 +64,145 @@
 
    $lower\\_shadow\_t = \min(Open\_t, Close\_t) - Low\_t$
    
- * real_body	
+ * range
 
-   : 종가 − 시가의 절대값 (캔들 바디 크기)
-
-   $real\\_body\_t = \left|Close\_t - Open\_t \right|$
-  
----
-
-**2. 거래량 기반 피처 (Volume-based Features)**
- * volume_z
-    
    : 
 
-   $volume\\_z\_t = \dfrac{Volume\_t - \mu\_{t-23t}}{\sigma\_{t-23t}}$
+   $range\_t = High\_t - Low\_t$
+   
+ * body_ratio
 
- * volume_change
-    
    : 
 
-   $volume\\_change\_t = \dfrac{Volume\_t - Volume\_{t-1}}{Volume\_{t-1}}$
+   $body\\_ratio\_t = \dfrac{\left|Close\_t - Open\_t \right|}{HIgh_t-Low_t}$
+
+ * upper_ratio
+ 
+   :
+
+   $upper\\_ratio\_t = \dfrac{upper\\_ratio\_t}{range\_t}$
+   
+ * lower_ratio
+ 
+   :
+
+   $lower\\_ratio\_t = \dfrac{lower\\_ratio\_t}{range\_t}$
    
 ---
-
-**3. 오더플로우 기반 피처 (Market Microstructure Features)**
-
- * buy_ratio
     
-   : 
+**3. 변동성 기반 피처 (Volatility-based Features)**
 
-   $buy\\_ratio\_t = \dfrac{taker\\_buy\\_base\_t}{volume\\_btc\_t}$
+  * rolling_vol_24
+
+   :
+
+   $rolling\\_vol\\_24\_t = \rm{std}(log\\_return\_{t-23:t})$
    
- * order_imbalance
-    
-   : 
+  * rolling_vol_168
 
-   $order\\_imbalance\_t = taker\\_buy\\_base\_t - (volume\\_btc\_t - taker\\_buy\\_base\_t)$
+   :
+
+   $rolling\\_vol\\_168\_t = \rm{std}(log\\_return\_{t-167:t})$
    
-  * 매수 비율(Buy Ratio), 매수–매도 불균형(Order Imbalance): 단기 수익률은 매수·매도 압력의 불균형에 의해 크게 좌우되며, 이는 시장 미시구조 분석에서 중요한 개념이다.
-
----
-    
-**4. 변동성 피처 (Volatility Features)**
-• Rolling Volatility (24h, 168h)
-
-과거 변동성은 미래 변동성 예측에서 강력한 지표로 작용한다.
-
-수식:
-$rolling\_vol\_k(t) = std(log\_return\_{t-k+1:t})$
-
-근거: Andersen, T., & Bollerslev, T. (1998). Volatility forecasting accuracy.
-
 • Parkinson Volatility
 
-고저차 기반 변동성 추정치는 전통적인 종가 기반 변동성보다 효율적이다.
+  * parkinson_vol
 
-수식:
-$parkinson\_vol\_t = \sqrt{\frac{1}{4 \ln(2)} \left( \ln{\left(\frac{High\_t}{Low\_t}\right)} \right)^2 }$
+   :
 
-5. 모멘텀 특징 (Momentum Indicators)
-• SMA / EMA / MACD / RSI
+   $parkinson\\_vol\_t = \sqrt{\dfrac{1}{4 \ln(2)} \left( \ln{\left(\dfrac{High\_t}{Low\_t}\right)} \right)^2 }$
 
-추세 기반 모멘텀 지표는 과거 데이터의 자기상관 구조를 이용해 미래 수익률의 패턴을 포착할 수 있다.
+---
 
-수식:
+**4. 추세 기반 피처 (Trend-based Features)**
+   
+  * SMA_5
 
-SMA
-$SMA\_k(t) = \frac{1}{k}\sum Close\_{t-i}$
+   :
 
-EMA
-$EMA\_t = \alpha Close\_t + (1-\alpha)EMA\_{t-1}$
-$\alpha = 2/(k+1)$
+   $SMA\\_5\_t = \dfrac{Close\_{t-4} + ... + Close\_{t}}{5}$
+   
+  * SMA_10
 
-MACD
-$MACD\_t = EMA\_{12}(t) - EMA\_{26}(t)$
+   :
 
-RSI
-$RSI\_t = 100 - \frac{100}{1 + RS\_t}$
+   $SMA\\_10\_t = \dfrac{Close\_{t-9} + ... + Close\_{t}}{10}$
+   
+  * SMA_20
 
-근거: Jegadeesh, N., & Titman, S. (1993). Returns to buying winners and selling losers.
+   :
 
-6. 시장 구조 변화 특징 (Regime Change Indicators)
-• Skewness / Kurtosis
+   $SMA\\_20\_t = \dfrac{Close\_{t-19} + ... + Close\_{t}}{20}$
 
-수익률 분포의 비대칭성과 fat-tail 정도는 시장 상태(regime)의 변화를 반영하는 핵심 지표이다.
 
-수식:
+  * EMA_12
 
-Skewness
-$skew\_{24}(t) = \frac{E[(r-\mu)^3]}{\sigma^3}$
+   :
 
-Kurtosis
-$kurt\_{24}(t) = \frac{E[(r-\mu)^4]}{\sigma^4}$
+   $EMA\\_12\_t = \dfrac{2}{13}\*Close\_t\*EMA\\_12\_{t-1}$
+   
 
-근거: Kim, J., & White, H. (2004). Structural breaks in GARCH models.
+  * EMA_26
 
-7. 기술적 변동성 지표 (Technical Volatility Indicators)
-• ATR (Average True Range)
+   :
 
-가격 변동폭을 기반으로 변동성 강도와 추세 전환을 포착하는 대표적인 기술적 지표이다.
+   $EMA\\_26\_t = \dfrac{2}{27}\*Close\_t\*EMA\\_26\_{t-1}$
+   
+  * MACD
 
-수식:
+   :
+   
+   $MACD\_t = EMA\\_12_t - EMA\\_26_t$
 
-TR
-$TR\_t = max(High\_t - Low\_t,\; |High\_t - Close\_{t-1}|,\; |Low\_t - Close\_{t-1}|)$
+---
 
-ATR
-$ATR\_{14}(t) = \frac{1}{14}\sum TR\_{t-i}$
+**5. 모멘텀 기반 피처 (Momentum-based Features)**
+  * RSI_14
 
-근거: Wilder, J. (1978). Technical Analysis.
+   :
+   
+   $RSI\\_14\_t = 100 - \dfrac{100}{1 + RS\\_14\_t}$
 
-8. 시간 기반 특징 (Time Features)
-• Hour of Day / Day of Week
+   $RS\\_14\_t = \dfrac{avggain\\_14\_t}{avgloss\\_14\_t}$
+   
+   $change\_t = Close\_t - Close\_{t-1}$
 
-암호화폐 시장은 24시간 운영되며 시간대·요일별로 가격 변동성과 수익률 패턴이 달라지는 비효율성이 관측된다.
+   상승한 경우 $gain\_t = change\_t$
 
-수식(개념적):
+   하락한 경우 $loss\_t = change\_t$
 
-$hour = timestamp.hour$
-$dayofweek = timestamp.dayofweek$
+   $avggain\\_14\_t = (gain\_{t-13} + ... + gain\_{t})/14$
 
-근거: Caporale, G., & Plastun, A. (2018). Calendar anomalies in the cryptocurrency market.
+   $avgloss\\_14\_t = (loss\_{t-13} + ... + loss\_{t})/14$
+
+---
+   
+**6. 기술적 변동성 피처 (Technical Volatility Indicators)**
+
+  * TR
+    
+  $TR\_t = \max(High\_t - Low\_t, |High\_t - Close\_{t-1}|, |Low\_t - Close\_{t-1}|)$
+
+  * ATR_14
+    
+  $ATR\\_{14}\_t = \dfrac{TR\_{t-13} + ... + TR\_t}{14}$
+
+---
+
+**7. 피처**
+
+  * skewness_24
+
+  :
+
+  $skewness\\_24\_(t) = \dfrac{E[(log\\_return-\mu)^3]}{\sigma^3}$
+
+  * Kurtosis_24
+
+  :
+    
+  $kurtosis\\_24\_t = \dfrac{E[(log\\_return-\mu)^4]}{\sigma^4}$
+
 ---
 **2. 데이터 기간**
   * CryptoDataDownload에서 제공하는 BTCUSDT 거래쌍 데이터는 2017-8-17 04:00:00 부터 2025-12-02 23:00:00 까지 존재한다.
@@ -253,6 +283,7 @@ $dayofweek = timestamp.dayofweek$
   * Jegadeesh, N., & Titman, S. (1993). Returns to buying winners and selling losers: Implications for stock market efficiency. Journal of Finance, 48(1), 65–91.
   * Kim, J. H., & White, H. (2004). Consistent VK testing for structural breaks in GARCH models. Journal of Econometrics, 122(1), 225–250.
   * Caporale, G. M., & Plastun, A. (2018). Calendar anomalies in the cryptocurrency market. Finance Research Letters.
+
 
 
 

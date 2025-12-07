@@ -1,10 +1,10 @@
 # 비트코인 주가 예측 프로젝트: Processed Data
 
-비트코인 주가 예측 프로젝트에서는 머신러닝 사용을 위해 피처 엔지니어링 (Feature engineering)을 실시한다. 각 피처들은 논문에 언급되었거나 또는 주가 예측에 일반적으로 사용되는 것으로 선정하였다.
+비트코인 주가 예측 프로젝트에서는 머신러닝을 위한 피처 엔지니어링 (Feature engineering)을 실시한다. 각 피처들은 논문에 언급되었거나 또는 주가 예측에 일반적으로 사용되는 것으로 선택하였다.
 
 ---
 
-**1. 주가 기반 피처 (Price-based Features)**
+**1. 가격 기반 피처 (Price-based Features)**
 
  * log_return
 
@@ -66,27 +66,27 @@
    
  * range
 
-   : 
+   : 봉의 전체 길이
 
    $range\_t = High\_t - Low\_t$
    
  * body_ratio
 
-   : 
+   : 봉 길이 대비 몸통 비율
 
    $body\\_ratio\_t = \dfrac{\left|Close\_t - Open\_t \right|}{HIgh_t-Low_t}$
 
  * upper_ratio
  
-   :
+   : 봉 길이 대비 윗꼬리 비율
 
-   $upper\\_ratio\_t = \dfrac{upper\\_ratio\_t}{range\_t}$
+   $upper\\_ratio\_t = \dfrac{upper\\_shadow\_t}{range\_t}$
    
  * lower_ratio
  
-   :
+   : 봉 길이 대비 아랫꼬리 비율
 
-   $lower\\_ratio\_t = \dfrac{lower\\_ratio\_t}{range\_t}$
+   $lower\\_ratio\_t = \dfrac{lower\\_shadow\_t}{range\_t}$
    
 ---
     
@@ -94,13 +94,13 @@
 
   * rolling_vol_24
 
-   :
+   : 지난 24시간 로그수익률의 표준편차
 
    $rolling\\_vol\\_24\_t = \rm{std}(log\\_return\_{t-23:t})$
    
   * rolling_vol_168
 
-   :
+   : 지난 168시간 로그수익률의 표준편차
 
    $rolling\\_vol\\_168\_t = \rm{std}(log\\_return\_{t-167:t})$
    
@@ -108,7 +108,7 @@
 
   * parkinson_vol
 
-   :
+   : 고저가 범위 기반 변동성 추정치
 
    $parkinson\\_vol\_t = \sqrt{\dfrac{1}{4 \ln(2)} \left( \ln{\left(\dfrac{High\_t}{Low\_t}\right)} \right)^2 }$
 
@@ -118,48 +118,47 @@
    
   * SMA_5
 
-   :
+   : 지난 5시간 단순이동평균
 
    $SMA\\_5\_t = \dfrac{Close\_{t-4} + ... + Close\_{t}}{5}$
    
   * SMA_10
 
-   :
+   : 지난 10시간 단순이동평균
 
    $SMA\\_10\_t = \dfrac{Close\_{t-9} + ... + Close\_{t}}{10}$
    
   * SMA_20
 
-   :
+   : 지난 20시간 단순이동평균
 
    $SMA\\_20\_t = \dfrac{Close\_{t-19} + ... + Close\_{t}}{20}$
 
 
   * EMA_12
 
-   :
+   : 지난 12시간 지수이동평균
 
-   $EMA\\_12\_t = \dfrac{2}{13}\*Close\_t\*EMA\\_12\_{t-1}$
-   
+   $EMA\\_12\_t = \dfrac{2}{13}Close\_t\ + (1 - \dfrac{2}{13})EMA\\_12\_{t-1}$
 
   * EMA_26
 
-   :
+   : 지난 26시간 지수이동평균
 
-   $EMA\\_26\_t = \dfrac{2}{27}\*Close\_t\*EMA\\_26\_{t-1}$
+   $EMA\\_26\_t = \dfrac{2}{27}Close\_t\ + (1 - \dfrac{2}{27})EMA\\_26\_{t-1}$
    
   * MACD
 
-   :
+   : EMA_12와 EMA_26의 차이
    
-   $MACD\_t = EMA\\_12_t - EMA\\_26_t$
+   $MACD\_t = EMA\\_12\_t - EMA\\_26\_t$
 
 ---
 
 **5. 모멘텀 기반 피처 (Momentum-based Features)**
   * RSI_14
 
-   :
+   : 지난 14시간 상승 및 하락폭 비교
    
    $RSI\\_14\_t = 100 - \dfrac{100}{1 + RS\\_14\_t}$
 
@@ -177,113 +176,44 @@
 
 ---
    
-**6. 기술적 변동성 피처 (Technical Volatility Indicators)**
+**6. 기술적 변동성 피처 (Technical Volatility features)**
 
   * TR
+
+  : 현재 고저차 및 직전 시간 종가의 차이를 고려한 변동폭
     
   $TR\_t = \max(High\_t - Low\_t, |High\_t - Close\_{t-1}|, |Low\_t - Close\_{t-1}|)$
 
   * ATR_14
+
+  : 지난 14 시간 평균 TR
     
   $ATR\\_{14}\_t = \dfrac{TR\_{t-13} + ... + TR\_t}{14}$
 
 ---
 
-**7. 피처**
+**7. 고차모멘트 피처 (Higher-Moment Features)**
 
   * skewness_24
 
-  :
+  : 지난 24시간 로그 수익률 분포의 비대칭성
 
   $skewness\\_24\_(t) = \dfrac{E[(log\\_return-\mu)^3]}{\sigma^3}$
 
   * Kurtosis_24
 
-  :
+  : 지난 24시간 로그 수익률 분포의 꼬리 두께께
     
   $kurtosis\\_24\_t = \dfrac{E[(log\\_return-\mu)^4]}{\sigma^4}$
 
 ---
-**2. 데이터 기간**
-  * CryptoDataDownload에서 제공하는 BTCUSDT 거래쌍 데이터는 2017-8-17 04:00:00 부터 2025-12-02 23:00:00 까지 존재한다.
-    
-    (25년 12월 4일 기준)
 
----
-**3. 데이터 간격**
-  * 일봉 데이터는 약 3,000개 수준으로 딥러닝 학습에는 부족하며, 분봉 데이터는 과도한 노이즈가 포함된다.
-  * 따라서, 약 6만 개 이상의 충분한 데이터을 확보하면서도 변동성 패턴을 잘 반영하기 위해 시간봉 데이터를 사용한다.
+**8. 참고문헌**
 
----
-**4. 데이터 구성 (btc_processed.csv)**
-  * 데이터를 구성하는 각 열과 그에 대한 설명은 다음과 같다.
-  * log_return          : 직전 시간 대비 로그 수익률
-  * abs_return          : 로그 수익률의 절대값 (변동성 크기 반영)
-  * return_5            : 지난 5시간 동안의 종가 변화율
-  * return_24           : 지난 24시간 동안의 종가 변화율
-  * high_low_range      : 시가 대비 고저차 비율 (단기 변동성 지표)
-  * Close_open          : 시가 대비 종가의 비율 변화
-  * upper_shadow        : 고가 - max(시가,종가)
-  * lower_shadow        : min(시가,종가) - 저가
-  * real_body           : candle 크기
-  * tradecount          : 해당 시간 동안 체결된 거래 횟수
-
-  * volume_z	          : 지난 24시간 거래량의 표준화 Z-score
-  * volume_change	      : 거래량 변화율
-
-  * buy_ratio	          : 매수 비율(taker_buy_base / volume_btc)
-  * buy_quote_ratio	    : 매수 비율(USDT 기준 거래량 대비)
-  * order_imbalance     :	매수량 − 매도량으로 계산한 거래 불균형
-
-  * rolling_vol_24      :	최근 24시간 로그수익률 표준편차(단기 변동성)
-  * rolling_vol_168     :	최근 168시간(1주) 로그수익률 변동성
-  * parkinson_vol       :	고가–저가 구간을 이용한 변동성 추정치
-
-  * SMA_5               :	5시간 단순 이동평균
-  * SMA_10              :	10시간 단순 이동평균
-  * SMA_20              :	20시간 단순 이동평균
-  * EMA_12              :	12시간 지수 이동평균
-  * EMA_26              :	26시간 지수 이동평균
-  * MACD	              : EMA12 − EMA26 (대표 추세·모멘텀 지표)
-  * RSI	                : 14시간 RSI (가격 상승·하락 강도 지표)
-
-  * skew_24	            : 최근 24시간 수익률 분포의 비대칭도
-  * kurt_24	            : 최근 24시간 수익률 분포의 첨도(꼬리 두께)
-
-  * TR	                : True Range(가격 변동폭: 고가·저가·전 종가 기반)
-  * ATR_14	            : 14시간 평균 True Range(변동성 강도 지표)
-
-  * hour                :	해당 시각의 시간(0~23)
-  * dayofweek	          : 요일(월=0, 일=6) — 시간대별/요일별 패턴 반영
-
-  * return_mean_24	    : 최근 24시간 로그수익률 평균
-  * return_std_24       :	최근 24시간 로그수익률 표준편차
-  * body_mean_24        :	최근 24시간 가격 몸통 크기 평균
+  > Cont, R. (2001). Empirical properties of asset returns: Stylized facts and statistical issues. Quantitative Finance, 1(2), 223–236.
+  > Parkinson, M. (1980). The extreme value method for estimating the variance of the rate of return. Journal of Business, 53(1), 61–65.
+  > Wilder, J. Welles. New concepts in technical trading systems. Greensboro, NC, 1978. 
   
-  > Unix time 
-    : 컴퓨터 시스템에서 날짜·시간을 숫자로 표현하는 방식으로, 1970년 1월 1일 00:00:00 UTC부터 흐른 시간을 ‘초’ 또는 ‘밀리초’ 단위로 나타낸 값이다.
-
-  > candle 
-    : 주식·암호화폐에서 많이 쓰는 가격 표시 방식으로, 일정 기간 동안의 시가(Open), 고가(High), 저가(Low), 종가(Close)를 하나의 블록로 묶어 표현한 것이다.
-
----
-**5. 데이터 수집 방식**
-  * CryptoDataDownload에서 제공하는 CSV 파일을 그대로 Raw Data로 사용한다.
-  * 링크는 다음과 같다: https://www.cryptodatadownload.com/data/binance/#google_vignette
-
-
-**6. 참고문헌**
-  * 
-   > Cont, R. (2001). Empirical properties of asset returns: Stylized facts and statistical issues. Quantitative Finance, 1(2), 223–236.
-
-  * Parkinson, M. (1980). The extreme value method for estimating the variance of the rate of return. Journal of Business, 53(1), 61–65.
-  * Karpoff, J. M. (1987). The relation between price changes and trading volume: A survey. Journal of Financial and Quantitative Analysis, 22(1), 109–126.
-  * Easley, D., López de Prado, M., & O’Hara, M. (2012). The microstructure of the stock market. Journal of Portfolio Management.
-  * Andersen, T. G., & Bollerslev, T. (1998). Answering the skeptics: Yes, standard volatility models do provide accurate forecasts. International Economic Review, 39(4), 885–905.
-  * Jegadeesh, N., & Titman, S. (1993). Returns to buying winners and selling losers: Implications for stock market efficiency. Journal of Finance, 48(1), 65–91.
-  * Kim, J. H., & White, H. (2004). Consistent VK testing for structural breaks in GARCH models. Journal of Econometrics, 122(1), 225–250.
-  * Caporale, G. M., & Plastun, A. (2018). Calendar anomalies in the cryptocurrency market. Finance Research Letters.
-
 
 
 
